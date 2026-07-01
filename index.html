@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cumpleaños de Adán</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500&family=Montserrat:wght@300;400;600&display=swap"
+        rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/flipdown@0.3.2/dist/flipdown.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --fondo-personalizado: #A84931;
+            /* Barro cálido */
+            --texto-claro: #F5EAE0;
+            /* Arena / Hueso */
+            --texto-oscuro: #3D4031;
+            /* Verde olivo oscuro para textos */
+            --dorado: #ffc04b;
+            /* Dorado rústico */
+            --dorado-sutil: #ffc04b;
+            --fondo-tarjetas: #A84931;
+            /* Barro para fondo de tarjetas */
+            --verde-olivo: #0c3008;
+            /* Verde olivo para acentos */
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--fondo-personalizado);
+            background-image: url('fondo.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: var(--texto-claro);
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        /* Opcional: Si quieres que las tarjetas de información resalten más, 
+        asegúrate de que sigan siendo blancas puras */
+        .card-info,
+        .itinerario-container {
+            background-color: var(--fondo-tarjetas) !important;
+            color: var(--texto-claro);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            /* Sombra para dar impacto */
+        }
+
+        /* --- HERO REESTRUCTURADO --- */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            overflow: hidden;
+            /* Importante para que la foto no se salga en el zoom */
+        }
+
+        /* Contenedor específico para la foto de fondo animada */
+        .hero-bg-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            /* Fondo */
+        }
+
+        .hero-bg-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            /* Mantiene proporción de la foto */
+            object-position: center 20%;
+            /* Ajusta el encuadre (20% para que se vea la cara) */
+
+            /* Aplicamos la animación a la FOTO */
+            animation: photoZoomIn 3s ease-out both;
+            will-change: transform;
+            /* Optimización para móvil */
+        }
+
+        /* Capa oscura (Overlay) para que se lea el texto */
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* Degradado que va de negro arriba a tu nuevo color abajo */
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.5) 70%, var(--fondo-personalizado) 100%);
+            z-index: 2;
+        }
+
+        /* Contenido (Texto/Contador) */
+        .hero .container {
+            position: relative;
+            z-index: 3;
+            /* Sobre la capa oscura */
+            color: white;
+            padding: 20px;
+
+            /* Aplicamos la animación al TEXTO, con un retraso */
+            animation: fadeInUp 1.5s ease-out 1s both;
+            /* Empieza 1s después que la foto */
+        }
+
+        .title {
+            font-family: 'Cinzel', serif;
+            font-size: 3.5rem;
+            color: #ffffff;
+            background-color: var(--dorado);
+            padding: 10px 40px;
+            border-radius: 15px;
+            display: inline-block;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            /* margin-bottom: 20px; */
+            margin-top: 40vh;
+        }
+
+        .title2 {
+            font-family: 'Cinzel', serif;
+            font-size: 2.5rem;
+            color: var(--texto-claro);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+            /* margin-bottom: 20px; */
+            margin-top: 10vh;
+        }
+
+        /* --- ANIMACIONES CSS --- */
+
+        /* 1. Animación de Zoom Suave para la FOTO */
+        @keyframes photoZoomIn {
+            from {
+                transform: scale(1.15);
+                /* Empieza un poco más grande */
+                opacity: 0;
+                /* Empieza invisible */
+            }
+
+            to {
+                transform: scale(1);
+                /* Termina en su tamaño original */
+                opacity: 1;
+                /* Termina visible */
+            }
+        }
+
+        /* 2. Animación de Entrada para el TEXTO (Aparecer Arriba) */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translate3d(0, 30px, 0);
+                /* 30px abajo */
+            }
+
+            to {
+                opacity: 1;
+                transform: translate3d(0, 0, 0);
+                /* En su lugar */
+            }
+        }
+
+        /* Estilo para los contenedores de los mapas */
+        .map-container {
+            width: 100%;
+            height: 200px;
+            /* Altura ideal para celular */
+            border-radius: 15px;
+            overflow: hidden;
+            margin-top: 15px;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .map-container iframe {
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
+        /* --- NUEVO ESTILO DE ITINERARIO VISUAL --- */
+        .itinerario-container {
+            background-color: var(--fondo-tarjetas);
+            padding: 40px 20px;
+            border-radius: 20px;
+        }
+
+        .itinerario-row {
+            display: flex;
+            align-items: center;
+            padding: 25px 0;
+            border-bottom: 1px solid rgba(107, 112, 92, 0.2);
+        }
+
+        .itinerario-row:last-child {
+            border-bottom: none;
+        }
+
+        .itinerario-icon {
+            flex: 0 0 80px;
+            /* Tamaño del icono */
+            font-size: 3rem;
+            /* Iconos grandes */
+            text-align: center;
+            margin-right: 20px;
+            color: #ffffff;
+            /* Blanco para resaltar en barro */
+        }
+
+        .itinerario-info {
+            text-align: left;
+        }
+
+        .itinerario-time {
+            display: block;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--dorado);
+        }
+
+        .itinerario-event {
+            font-size: 1.2rem;
+            color: var(--texto-claro);
+            margin: 0;
+        }
+
+        /* --- ESTILOS PARA IMÁGENES DE LUGARES CON ANIMACIÓN --- */
+
+        /* Contenedor de la imagen en la tarjeta */
+        .card-img-container {
+            width: 100%;
+            height: 180px;
+            /* Altura ideal para móvil */
+            overflow: hidden;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            position: relative;
+        }
+
+        .card-place-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        /* --- CLASES DE ANIMACIÓN SUTIL (FadeIn) --- */
+
+        /* Estado inicial: invisible y un poco abajo */
+        .fade-in-on-scroll {
+            opacity: 0;
+            transform: translate3d(0, 30px, 0);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+            will-change: opacity, transform;
+            /* Optimización */
+        }
+
+        /* Estado final: visible y en su lugar */
+        .fade-in-on-scroll.appear {
+            opacity: 1;
+            transform: translate3d(0, 0, 0);
+        }
+
+        /* Botón de Música Flotante */
+        .music-control {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 999;
+            background-color: var(--dorado-sutil);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            border: none;
+            transition: transform 0.3s ease;
+        }
+
+        .music-control:hover {
+            transform: scale(1.1);
+        }
+
+        /* Contenedor del botón para posicionar la leyenda */
+        .music-wrapper {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            z-index: 999;
+        }
+
+        /* La leyenda "Reproduceme" */
+        .music-legend {
+            background-color: var(--dorado-sutil);
+            color: #ffffff;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-right: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            border: 2px solid #ffffff;
+            white-space: nowrap;
+            /* Animación sutil de levitación */
+            animation: float-text 3s ease-in-out infinite;
+        }
+
+        @keyframes float-text {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            50% {
+                transform: translateX(-5px);
+            }
+        }
+
+        /* Ajuste al botón para que ya no sea 'fixed' directamente (el wrapper lo es) */
+        .music-control {
+            position: relative;
+            bottom: 0;
+            right: 0;
+            /* ... resto de tus estilos actuales de .music-control se quedan igual ... */
+        }
+
+        /* Animación de pulso cuando la música suena */
+        .playing {
+            animation: pulse-gold 2s infinite;
+        }
+
+        @keyframes pulse-gold {
+            0% {
+                box-shadow: 0 0 0 0 rgba(197, 160, 89, 0.7);
+            }
+
+            70% {
+                box-shadow: 0 0 0 15px rgba(197, 160, 89, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(197, 160, 89, 0);
+            }
+        }
+
+        /* --- ESTILOS DEL CARRUSEL --- */
+        .carousel-container {
+            padding: 40px 0;
+            max-width: 600px;
+            /* Tamaño máximo para que no se deforme en PC */
+            margin: 0 auto;
+        }
+
+        .carousel-item {
+            height: 450px;
+            /* Altura fija para todas las fotos en móvil */
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .carousel-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            /* Esto hace que la foto llene el espacio sin estirarse */
+            object-position: center;
+        }
+
+        .carousel-item {
+            transition: transform 0.6s ease-in-out;
+        }
+
+        /* Bolitas de navegación doradas */
+        .carousel-indicators [button] {
+            background-color: var(--dorado-sutil) !important;
+        }
+
+        /* --- ESTILOS PARA EL CUADRO DE VESTIMENTA --- */
+        .dress-code-container {
+            background-color: rgba(168, 73, 49, 0.9);
+            /* Barro translúcido */
+            border: 2px dashed var(--dorado);
+            /* Borde punteado dorado */
+            border-radius: 20px;
+            padding: 30px;
+            margin-top: 40px;
+        }
+
+        .dress-code-title {
+            font-family: 'Cinzel', serif;
+            color: #ffffff;
+            background-color: var(--dorado);
+            padding: 10px 30px;
+            border-radius: 15px;
+            display: inline-block;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+        }
+
+        .dress-code-gallery {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            /* Para que se acomode en móvil */
+        }
+
+        .dress-code-item {
+            flex: 1;
+            min-width: 100px;
+            max-width: 150px;
+            text-align: center;
+        }
+
+        .dress-code-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            margin-bottom: 10px;
+            border: 3px solid var(--fondo-tarjetas);
+        }
+
+        .dress-code-text {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--texto-claro);
+        }
+
+        /* --- RESTO DE ESTILOS (IGUALES) --- */
+        #flipdown-container {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+
+        .flipdown {
+            display: flex !important;
+            flex-wrap: nowrap !important;
+            justify-content: center;
+            width: auto !important;
+            transform: scale(0.7);
+            transform-origin: center center;
+        }
+
+        .section {
+            padding: 50px 20px;
+            text-align: center;
+        }
+
+        .card-info {
+            background: var(--fondo-tarjetas);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            margin-bottom: 20px;
+            border-top: 5px solid var(--dorado);
+            color: var(--texto-claro);
+        }
+
+        .btn-confirmar {
+            background-color: var(--verde-olivo);
+            color: var(--texto-claro) !important;
+            border-radius: 50px;
+            padding: 15px 40px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 4px 15px rgba(107, 112, 92, 0.4);
+        }
+
+        .btn-confirmar:hover {
+            background-color: var(--dorado);
+            color: white !important;
+        }
+
+        .map-link {
+            color: var(--dorado);
+            text-decoration: none;
+            font-weight: 600;
+            display: block;
+            margin-top: 10px;
+        }
+
+        .btn-custom {
+            background-color: var(--dorado);
+            color: white !important;
+            padding: 8px 20px;
+            border-radius: 30px;
+            text-decoration: none;
+            display: inline-block;
+            font-weight: 600;
+            margin-top: 15px;
+            box-shadow: 0 4px 10px rgba(200, 159, 84, 0.3);
+        }
+
+        .btn-custom:hover {
+            background-color: var(--verde-olivo);
+        }
+    </style>
+</head>
+
+<body>
+
+    <section class="hero">
+        <div class="hero-bg-container">
+            <img src="adan.png" alt="Adán" class="hero-bg-image">
+        </div>
+
+        <div class="hero-overlay"></div>
+
+        <div class="container">
+            <h1 class="title2">¡Fiesta Sorpresa!</h1>
+            <h1 class="title">Adán</h1>
+            <p class="fs-5">Acompáñame a festejar el cumpleaños sorpresa #60 de mi papá.
+            </p>
+            <p class="fs-5">¡Por favor, guarda el secreto!
+            </p>
+
+            <div id="flipdown-container">
+                <div id="flipdown" class="flipdown flipdown__theme-dark"></div>
+            </div>
+
+            <p class="mt-4 fw-bold">Sábado 18 de julio del 2026</p>
+        </div>
+    </section>
+
+    <section class="section container text-center">
+        <h2 class="mb-5"
+            style="font-family: 'Cinzel', serif; color: #ffffff; background-color: var(--dorado); padding: 15px 40px; border-radius: 15px; display: inline-block; box-shadow: 0 5px 15px rgba(0,0,0,0.15);">
+            Dónde y Cuándo</h2>
+
+        <div class="row">
+
+            <div class="col-md-6 mb-4 fade-in-on-scroll">
+                <div class="card-info h-100">
+                    <h3 class="mb-4" style="font-family: 'Cinzel', serif;">Recepción</h3>
+
+                    <div class="card-img-container">
+                        <img src="granja.jpg" alt="Jardín de Eventos" class="card-place-img">
+                    </div>
+
+                    <p>03:00 pm<br>Terraza con alberca "La Granja"<br>Tonalá, Jalisco</p>
+                    <a href="https://maps.app.goo.gl/eBn4fGcDEPH6cvCK8" class="btn-custom">Cómo llegar</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section container fade-in-on-scroll">
+        <div class="dress-code-container text-center">
+            <h2 class="dress-code-title">¡No olvides tu traje de baño!</h2>
+            <p class="mb-4">¡Queremos que disfrutes de la refrecante alberca!</p>
+
+            <div class="dress-code-gallery">
+                <div class="dress-code-item">
+                    <img src="alberca.jpeg" alt="Mezclilla" class="dress-code-img">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section container">
+        <h2 class="mb-5"
+            style="font-family: 'Cinzel', serif; color: #ffffff; background-color: var(--dorado); padding: 15px 40px; border-radius: 15px; display: inline-block; box-shadow: 0 5px 15px rgba(0,0,0,0.15);">
+            Itinerario</h2>
+
+        <div class="itinerario-container shadow-sm">
+
+            <div class="itinerario-row">
+                <div class="itinerario-icon">🥂</div>
+                <div class="itinerario-info">
+                    <span class="itinerario-time">02:00 PM</span>
+                    <p class="itinerario-event">Recepción y Bienvenida</p>
+                </div>
+            </div>
+
+            <div class="itinerario-row">
+                <div class="itinerario-icon">🍽️</div>
+                <div class="itinerario-info">
+                    <span class="itinerario-time">03:00 PM</span>
+                    <p class="itinerario-event">Comida Familiar</p>
+                </div>
+            </div>
+
+            <div class="itinerario-row">
+                <div class="itinerario-icon">🪗</div>
+                <div class="itinerario-info">
+                    <span class="itinerario-time">05:00 PM</span>
+                    <p class="itinerario-event">Música en vivo</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="section text-center" style="background-color: var(--fondo-tarjetas); color: var(--texto-claro);">
+        <div class="container">
+            <h2 class="mb-4">¿Nos acompañas?</h2>
+            <p class="mb-5">Para nosotros es muy importante contar con tu presencia.</p>
+            <p class="mb-5">Por favor confirma antes del 1 de junio.</p>
+            <a href="https://wa.me/523311740214?text=Confirmo%20mi%20asistencia%0AAtentamente%3A"
+                class="btn btn-confirmar">
+                Confirmar por WhatsApp
+            </a>
+        </div>
+    </section>
+
+    <footer class="text-center py-5">
+        <p style="font-size: 0.8rem; color: var(--texto-claro);">Con cariño, sus papás y padrinos.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/flipdown@0.3.2/dist/flipdown.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Fecha: 20 de Junio de 2026 a las 12:00
+            // Mes es 5 porque Junio es 5
+            const eventDate = new Date(2026, 6, 18, 15, 0, 0).getTime() / 1000;
+
+            const flipdown = new FlipDown(eventDate)
+                .start()
+                .ifEnded(() => {
+                    document.getElementById('flipdown-container').innerHTML = "<h4>¡Es hoy!</h4>";
+                });
+        });
+    </script>
+    <script>
+        // --- LÓGICA PARA ANIMACIÓN AL HACER SCROLL ---
+        document.addEventListener("DOMContentLoaded", function () {
+            const elementsToAnimate = document.querySelectorAll(".fade-in-on-scroll");
+
+            // Configuración del Observador
+            const observerOptions = {
+                root: null, // Usa la ventana (viewport)
+                rootMargin: "0px",
+                threshold: 0.2 // Se dispara cuando el 20% del elemento es visible
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        // Si el elemento entra en la vista, añade la clase 'appear'
+                        entry.target.classList.add("appear");
+                        // Opcional: deja de observar después de aparecer
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            // Activamos el observador para cada elemento
+            elementsToAnimate.forEach(element => {
+                observer.observe(element);
+            });
+        });
+
+        function toggleMusic() {
+            const music = document.getElementById('bgMusic');
+            const btn = document.getElementById('musicBtn');
+            const icon = document.getElementById('musicIcon');
+            const legend = document.getElementById('musicLegend');
+
+            if (music.paused) {
+                music.play();
+                btn.classList.add('playing');
+                icon.innerText = '⏸️';
+                legend.style.display = 'none'; // Oculta el texto al sonar
+            } else {
+                music.pause();
+                btn.classList.remove('playing');
+                icon.innerText = '🎵';
+                legend.style.display = 'block'; // Lo muestra si pausan
+            }
+        }
+        document.addEventListener('DOMContentLoaded', function () {
+            var myCarousel = document.querySelector('#carouselMateo');
+            var carousel = new bootstrap.Carousel(myCarousel, {
+                interval: 3000, // Cambia cada 3 segundos
+                ride: 'carousel',
+                pause: false // No se detiene ni aunque pongas el mouse encima
+            });
+        });
+    </script>
+    <div class="music-wrapper">
+        <span class="music-legend" id="musicLegend">Reprodúceme</span>
+
+        <button class="music-control" id="musicBtn" onclick="toggleMusic()">
+            <span id="musicIcon">🎵</span>
+        </button>
+    </div>
+
+    <audio id="bgMusic" loop>
+        <source src="song.mp3" type="audio/mpeg">
+    </audio>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
